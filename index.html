@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>炒股模拟器 · 单人试玩版</title>
+<link rel="stylesheet" href="css/style.css?v=9">
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><b>炒股模拟器</b><span>名字待定 · 单人试玩版 v0.3</span></div>
+    <div class="hud">
+      <div><span class="k">交易日</span><div class="days" id="days"></div></div>
+      <div><span class="k" id="phase">—</span><span class="v" id="clock">--:--</span></div>
+      <div class="tlw"><span class="k">今天走到哪了 · 本节还剩 <span id="left">--</span></span><div class="tl" id="tl"></div></div>
+      <div class="ix" data-i="15"><div><span class="k">大盘指数</span><span class="v" id="ixB">—</span></div><canvas class="spk" id="spB" width="128" height="48"></canvas></div>
+      <div class="ix" data-i="16"><div><span class="k">小盘指数</span><span class="v" id="ixS">—</span></div><canvas class="spk" id="spS" width="128" height="48"></canvas></div>
+    </div>
+    <div class="role">
+      <canvas id="me" width="10" height="10"></canvas>
+      <div><div class="nm" id="rName">—</div><div class="sk" id="rSkill"></div><div class="goal" id="rGoal"></div><div class="mut" id="rMut"></div></div>
+    </div>
+  </header>
+  <div class="tape" id="tape" aria-label="行情滚动条"><div class="tape-in" id="tapeIn"></div></div>
+  <div class="vil" id="vil">
+    <canvas id="bot" width="10" height="10"></canvas>
+    <div class="vq"><span class="k">量化盘今天</span><b id="qd">—</b></div>
+    <div class="vr"><span class="k" id="rageT">散户怒气</span><div class="rage"><i id="rage"></i></div></div>
+    <button class="btn sm sell" id="bRep" disabled>举报量化</button>
+    <span class="vs" id="qSay"></span>
+  </div>
+
+  <div class="main">
+    <div class="col">
+      <section class="win grow"><h2>行情 <small>点一下切换</small></h2><div class="list" id="list"></div></section>
+    </div>
+
+    <div class="col">
+      <div class="chart">
+        <div class="chead">
+          <span class="nm" id="nm">—</span><span class="tg" id="tg"></span>
+          <span class="px" id="px"></span><span class="pc" id="pc"></span>
+          <div class="ctabs" id="ctabs"><button data-m="T" class="on">分时</button><button data-m="K">日K</button><button data-m="F">资料</button></div>
+          <div class="st" id="st"></div>
+        </div>
+        <div class="cbody">
+          <div class="cv"><canvas id="cv"></canvas><div class="f10" id="f10"></div><div class="sumry" id="sumry"></div><div class="sumry pick" id="pick"></div><div class="boss" id="boss"></div><div class="fxl" id="fxl"></div></div>
+          <aside class="bk">
+            <div class="btabs" id="btabs"><button data-b="book" class="on">盘口</button><button data-b="tr">明细</button><button data-b="dist">分价表</button></div>
+            <div id="bk"></div>
+          </aside>
+        </div>
+      </div>
+      <div class="deck">
+        <section class="win c-yel">
+          <h2>下单</h2>
+          <div class="trade">
+            <div class="grp" id="gStock">
+              <button class="btn buy" id="bBuy">买入</button><button class="btn sell" id="bSell">卖出</button>
+              <span class="lb2">数量</span>
+              <span class="grp" id="size"><button class="btn sm on" data-f="0.25">1/4</button><button class="btn sm" data-f="0.5">一半</button><button class="btn sm" data-f="1">全部</button></span>
+            </div>
+            <div class="grp hide" id="gFut">
+              <button class="btn buy" id="bLong">买涨</button><button class="btn sell" id="bShort">买跌</button><button class="btn" id="bClose">平仓</button>
+              <span class="lb2">手数</span>
+              <span class="grp" id="lots"><button class="btn sm on" data-n="1">1</button><button class="btn sm" data-n="5">5</button><button class="btn sm" data-n="20">20</button><button class="btn sm" data-n="max">最多</button></span>
+            </div>
+            <div class="info" id="oInfo"></div>
+            <div class="info perk" id="perk"></div>
+            <div class="info fun" id="fun"></div>
+            <div class="grp" id="gCards"></div>
+            <div class="grp" id="gSkill"></div>
+            <div class="grp hide" id="gBank"><button class="btn sm fu" id="bIn">转入场内</button><button class="btn sm fu" id="bOut">转出场外</button><span class="info" id="bankInfo"></span></div>
+          </div>
+        </section>
+        <section class="win c-gray">
+          <h2>我的账户</h2>
+          <div class="sum" id="sum"></div>
+          <div class="atabs" id="atabs"><button data-a="pos" class="on">持仓</button><button data-a="ord">委托</button><button data-a="goal">目标</button></div>
+          <div id="acctBody"></div>
+        </section>
+      </div>
+    </div>
+
+    <div class="col side">
+      <div class="mtabs" id="mtabs"><button class="btn sm on" data-w="w0">消息<i></i></button><button class="btn sm" data-w="w1">股吧<i></i></button><button class="btn sm" data-w="w2">群聊<i></i></button></div>
+      <section class="win c-lime grow on" id="w0"><h2>7x24 消息 <small class="blink">● 直播</small></h2><div class="feed" id="news"></div></section>
+      <section class="win c-mag grow" id="w1"><h2>股吧 <small>谁都能说</small></h2><div class="feed" id="bar2"></div>
+        <form class="say" data-to="bar2"><input placeholder="在股吧说点什么…" maxlength="40" aria-label="股吧输入"><button class="btn sm">发</button></form></section>
+      <section class="win c-blue grow" id="w2"><h2 id="grpT">群聊</h2><div class="feed" id="chat"></div>
+        <form class="say" data-to="chat" id="chatForm"><input placeholder="在群里说点什么…" maxlength="40" aria-label="群聊输入"><button class="btn sm">发</button></form></section>
+    </div>
+  </div>
+
+  <footer class="foot">
+    <button class="btn sm" id="bPause">暂停</button>
+    <span class="grp" id="speed"><span class="lb2">速度</span><button class="btn sm on" data-s="1">正常</button><button class="btn sm" data-s="2">2 倍</button><button class="btn sm" data-s="6">6 倍</button></span>
+    <button class="btn sm" id="bNew">重新开局</button>
+    <button class="btn sm" id="bSfx">声音：开</button>
+    <span class="sp">全部是虚构数据，只用假钱，不构成任何投资建议</span>
+  </footer>
+</div>
+
+<div class="mask on" id="setup">
+  <div class="dlg">
+    <h1>抽签定角色</h1>
+    <p>一桌 10 个座位：国家队 1 个、机构 2 个（其中一个是潜伏的）、游资 2 个、散户 5 个。抽到哪个算哪个，不能挑，也看不到别人抽到了什么。这一版别的座位和量化盘都由电脑扮演。一局 5 个交易日，大约 15 分钟。每天开盘前有悬赏可接，午休有竞猜，量化太嚣张了散户可以联名举报。</p>
+    <div class="seats" id="seats" aria-label="10 个座位"></div>
+    <div class="mine hide" id="mine" aria-live="polite"></div>
+    <div class="opt hide" id="optIn"><span>有多少钱放在场内：</span><input type="range" id="inPct" min="10" max="100" step="10" value="60" aria-label="场内资金比例"><b id="inTxt"></b></div>
+    <div class="opt hide" id="optHold"><span>机构和国家队开局就带着股票持仓，钱都在场内。</span></div>
+    <button class="btn buy big" id="bDraw">抽签</button>
+    <button class="btn buy big hide" id="bStart">开始</button>
+    <details class="new3"><summary>这一版新加的玩法（点开看）</summary><ul>
+      <li><b>每日悬赏</b>：每天开盘前三选一，做成了给一张道具卡，没做成不扣东西。</li>
+      <li><b>道具卡</b>：内参（早 3 秒看消息）、后悔药（把刚下的单子倒回去）、透视镜（看一只股票是谁在买卖）。</li>
+      <li><b>午休竞猜</b>：猜下午大盘比中午高还是低，能看到桌上别人怎么猜。</li>
+      <li><b>举报量化</b>：量化赚得越多，散户怒气涨得越快。满了，散户可以联名举报，量化停 1 小时。</li>
+      <li><b>突发小事</b>：老板来了、同事荐股、外卖到了……8 秒内二选一。</li>
+      <li><b>行情剧本</b>：每局大盘的走法不一样，结算时才揭晓这局是哪一种。</li>
+      <li><b>徽章和声音</b>：做得漂亮会发徽章，只有你自己看得到。声音在最下面可以关。</li>
+    </ul></details>
+    <details class="book"><summary>翻翻角色图鉴：一桌有哪 10 种角色（只能看，不能挑）</summary><div class="roles" id="roles"></div></details>
+  </div>
+</div>
+
+<div class="mask" id="end">
+  <div class="dlg">
+    <h1>本局结算</h1>
+    <p id="endSub"></p>
+    <div class="res" id="res"></div>
+    <button class="btn buy big" id="bAgain">再来一局</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="banner" id="banner"></div>
+<div class="life" id="life"></div>
+<div class="bdg" id="bdg"></div>
+<div class="pops" id="pops"></div>
+
+<script src="data/config.js?v=9"></script>
+<script src="data/news.js?v=9"></script>
+<script src="data/fun.js?v=9"></script>
+<script src="js/engine.js?v=9"></script>
+<script src="js/charts.js?v=9"></script>
+<script src="js/sfx.js?v=9"></script>
+<script src="js/ui.js?v=9"></script>
+</body>
+</html>

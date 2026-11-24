@@ -1,0 +1,9 @@
+# 只把游戏本身放到网上，其他东西（方案、旧版备份、分享用的拷贝）留在自己电脑里
+/*
+!/.gitignore
+!/README.md
+!/index.html
+!/css/
+!/js/
+!/data/
+.DS_Store
